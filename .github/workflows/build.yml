@@ -1,0 +1,93 @@
+#Modified by BONE to create a proper zip for the server deployment automation
+name: Build and Publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**/README.md'
+
+env:
+  PROJECT_PATH_CS2_SIMPLEADMIN: "CS2-SimpleAdmin/CS2-SimpleAdmin.csproj"
+  PROJECT_NAME_CS2_SIMPLEADMIN: "CS2-SimpleAdmin"
+  PROJECT_PATH_CS2_SIMPLEADMINAPI: "CS2-SimpleAdminApi/CS2-SimpleAdminApi.csproj"
+  PROJECT_NAME_CS2_SIMPLEADMINAPI: "CS2-SimpleAdminApi"
+  OUTPUT_PATH: "./addons/counterstrikesharp"
+  TMP_PATH: "./tmp"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    outputs:
+      build_version: ${{ steps.get_version.outputs.VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Get Version
+        id: get_version
+        run: echo "VERSION=$(cat CS2-SimpleAdmin/VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Restore & Build All Projects
+        run: |
+          dotnet restore ${{ env.PROJECT_PATH_CS2_SIMPLEADMIN }}
+          dotnet build ${{ env.PROJECT_PATH_CS2_SIMPLEADMIN }} -c Release -o ${{ env.TMP_PATH }}/${{ env.PROJECT_NAME_CS2_SIMPLEADMIN }}
+          dotnet restore ${{ env.PROJECT_PATH_CS2_SIMPLEADMINAPI }}
+          dotnet build ${{ env.PROJECT_PATH_CS2_SIMPLEADMINAPI }} -c Release -o ${{ env.TMP_PATH }}/${{ env.PROJECT_NAME_CS2_SIMPLEADMINAPI }}
+
+      - name: Combine projects
+        run: |
+          mkdir -p ${{ env.OUTPUT_PATH }}/plugins/CS2-SimpleAdmin
+          mkdir -p ${{ env.OUTPUT_PATH }}/shared/CS2-SimpleAdminApi
+
+          cp -r ${{ env.TMP_PATH }}/${{ env.PROJECT_NAME_CS2_SIMPLEADMIN }}/* ${{ env.OUTPUT_PATH }}/plugins/CS2-SimpleAdmin/
+          cp -r ${{ env.TMP_PATH }}/${{ env.PROJECT_NAME_CS2_SIMPLEADMINAPI }}/* ${{ env.OUTPUT_PATH }}/shared/CS2-SimpleAdminApi/
+
+      - name: Zip Main Build Output
+        run: zip -r CS2-SimpleAdmin-${{ steps.get_version.outputs.VERSION }}.zip ./addons
+
+      - name: Upload all artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CS2-SimpleAdmin-Build-Artifacts
+          path: CS2-SimpleAdmin-${{ steps.get_version.outputs.VERSION }}.zip
+
+  publish:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: CS2-SimpleAdmin-Build-Artifacts
+          path: .
+          
+      - name: Publish combined release
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          artifacts: CS2-SimpleAdmin-${{ needs.build.outputs.build_version }}.zip
+          name: "CS2-SimpleAdmin-${{ needs.build.outputs.build_version }}"
+          tag: "build-${{ needs.build.outputs.build_version }}"
+          body: |
+            Place the files in your server as follows:
+
+            - CS2-SimpleAdmin:
+              Extract the contents of the zip directly into your server's root directory (the `addons` folder is already included).
+              After the first launch, configure the plugin using the JSON config file at:
+              addons/counterstrikesharp/configs/plugins/CS2-SimpleAdmin/CS2-SimpleAdmin.json
+
+            Remember to restart or reload your game server after installing and configuring the plugins.
