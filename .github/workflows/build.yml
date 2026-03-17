@@ -79,6 +79,7 @@ jobs:
       - name: Publish combined release
         uses: ncipollo/release-action@v1.14.0
         with:
+          allowUpdates: true # <--- Add this line
           artifacts: CS2-SimpleAdmin-${{ needs.build.outputs.build_version }}.zip
           name: "CS2-SimpleAdmin-${{ needs.build.outputs.build_version }}"
           tag: "build-${{ needs.build.outputs.build_version }}"
