@@ -18,6 +18,8 @@ namespace CS2_SimpleAdmin;
 public partial class CS2_SimpleAdmin
 {
     private bool _serverLoading;
+    private CounterStrikeSharp.API.Modules.UserMessages.UserMessageCallback? _hookUmChatDelegate;
+    private CounterStrikeSharp.API.Modules.Commands.CommandInfo.CommandCallback? _commandListenerDelegate;
     
     private void RegisterEvents()
     {
@@ -27,9 +29,13 @@ public partial class CS2_SimpleAdmin
         RegisterListener<Listeners.OnClientConnected>(OnClientConnected);
         RegisterListener<Listeners.OnGameServerSteamAPIActivated>(OnGameServerSteamAPIActivated);
         if (Config.OtherSettings.UserMessageGagChatType)
-            HookUserMessage(118, HookUmChat);
+        {
+            _hookUmChatDelegate = HookUmChat;
+            HookUserMessage(118, _hookUmChatDelegate);
+        }
         
-        AddCommandListener(null, ComamndListenerHandler);
+        _commandListenerDelegate = ComamndListenerHandler;
+        AddCommandListener(null, _commandListenerDelegate);
         // AddCommandListener("callvote", OnCommandCallVote);
         // AddCommandListener("say", OnCommandSay);
         // AddCommandListener("say_team", OnCommandTeamSay);
@@ -41,10 +47,17 @@ public partial class CS2_SimpleAdmin
         RemoveListener<Listeners.OnClientConnect>(OnClientConnect);
         RemoveListener<Listeners.OnClientConnected>(OnClientConnected);
         RemoveListener<Listeners.OnGameServerSteamAPIActivated>(OnGameServerSteamAPIActivated);
-        if (Config.OtherSettings.UserMessageGagChatType)
-            UnhookUserMessage(118, HookUmChat);
+        if (Config.OtherSettings.UserMessageGagChatType && _hookUmChatDelegate != null)
+        {
+            UnhookUserMessage(118, _hookUmChatDelegate);
+            _hookUmChatDelegate = null;
+        }
         
-        RemoveCommandListener(null!, ComamndListenerHandler, HookMode.Pre);
+        if (_commandListenerDelegate != null)
+        {
+            RemoveCommandListener(null!, _commandListenerDelegate, HookMode.Pre);
+            _commandListenerDelegate = null;
+        }
         // AddCommandListener("callvote", OnCommandCallVote);
         // AddCommandListener("say", OnCommandSay);
         // AddCommandListener("say_team", OnCommandTeamSay);
