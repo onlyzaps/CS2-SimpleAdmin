@@ -18,8 +18,8 @@ namespace CS2_SimpleAdmin;
 public partial class CS2_SimpleAdmin
 {
     private bool _serverLoading;
-    private CounterStrikeSharp.API.Modules.UserMessages.UserMessageCallback? _hookUmChatDelegate;
-    private CounterStrikeSharp.API.Modules.Commands.CommandInfo.CommandCallback? _commandListenerDelegate;
+    private UserMessage.UserMessageHandler? _hookUmChatDelegate;
+    private CommandInfo.CommandListenerCallback? _commandListenerDelegate;
     
     private void RegisterEvents()
     {
