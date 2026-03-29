@@ -868,12 +868,14 @@ internal static class Helper
         config.Version = newCfgVersion;
 
         // serialize the updated config back to json
+#pragma warning disable IL2026
         var updatedJsonContent = JsonSerializer.Serialize(config,
             new JsonSerializerOptions
             {
                 WriteIndented = true,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
+#pragma warning restore IL2026
         File.WriteAllText(CfgPath, updatedJsonContent);
     }
 
