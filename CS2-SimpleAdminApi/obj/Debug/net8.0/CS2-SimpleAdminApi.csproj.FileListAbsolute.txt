@@ -1,0 +1,12 @@
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\bin\Debug\net8.0\CS2-SimpleAdminApi.deps.json
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\bin\Debug\net8.0\CS2-SimpleAdminApi.dll
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\bin\Debug\net8.0\CS2-SimpleAdminApi.pdb
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\CS2-SimpleAdminApi.csproj.AssemblyReference.cache
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\CS2-SimpleAdminApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\CS2-SimpleAdminApi.AssemblyInfoInputs.cache
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\CS2-SimpleAdminApi.AssemblyInfo.cs
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\CS2-SimpleAdminApi.csproj.CoreCompileInputs.cache
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\CS2-SimpleAdminApi.dll
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\refint\CS2-SimpleAdminApi.dll
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\CS2-SimpleAdminApi.pdb
+C:\Users\vindict6\Desktop\PluginFix\CS2-SimpleAdmin-main\CS2-SimpleAdminApi\obj\Debug\net8.0\ref\CS2-SimpleAdminApi.dll
